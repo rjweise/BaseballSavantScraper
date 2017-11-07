@@ -1,20 +1,26 @@
+
 for  (m in c(4,5,6,7,8,9))  #MONTHS of regular season
 {
   monthpart <- m
-
-    for (d in c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31))  #DAYS of regular season
+  
+  for (d in c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31))  #DAYS of regular season
   {
     daypart <- d
     scrapebb = ""
     Filetext = "-"
-    startpartD <- (paste("2017-",monthpart,"-",daypart,sep="")) #Create string for start date
+    startpartD <- (paste("2017-",monthpart,"-",daypart,sep="")) #Create string for start date; change 2017 if scraping different season
     endpartD <- startpartD #As data is pulled per day, end date is same as start date
-
+    
     tryCatch(scrapebb <- scrape_statcast_savant_batter_all(startpartD,endpartD) #uses baseballr package function;replace 'batter' with 'pitcher' for pitcher data
-    , error = function(e) print(startpartD)) #tryCatch and error is used to continue scraping when an empty date (no games) is found
-      
-    Filetext <- paste("bbsavant-",startpartD,"--",endpartD,".csv",sep="")
-    write.csv(scrapebb,file = Filetext) #Write a csv file per day to the workdirectory (setWD(''))
-    print(Filetext) #for testing
+             , error = function(e) print("Error")) #tryCatch and error is used to continue scraping when an empty date (no games) is found
+    
+    TEST2 <- NROW(scrapebb) #Counts the number of records in the imported dataframe
+    
+    if(TEST2>1) { #Tests to see if the imported dataframe has more than one (header) record
+    
+      Filetext <- paste("bbsavant-",startpartD,"--",endpartD,".csv",sep="")
+      write.csv(scrapebb,file = Filetext) #Write a csv file per day to the workdirectory (setWD(''))
+      print(Filetext) #for testing
+      }
   }
 }
