@@ -1,0 +1,7 @@
+setwd("/Users/rjweise/Downloads/2017")
+filenames <- list.files(full.names=TRUE)
+All <- lapply(filenames,function(i){
+  read.csv(i, header=FALSE)
+})
+df <- do.call(rbind.data.frame, All)
+write.csv(df,file = 'combined2017.csv', row.names=FALSE)
